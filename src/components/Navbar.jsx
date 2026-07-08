@@ -12,6 +12,7 @@ function Navbar() {
           <a href="#trainers" className="hover:text-amber-500 transition">Тренеры</a>
           <a href="#schedule" className="hover:text-amber-500 transition">Расписание</a>
           <a href="#contact" className="hover:text-amber-500 transition">Записаться</a>
+          <Link to="/login" className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-md hover:bg-amber-700 transition-colors">Войти</Link>
         </nav>
       </div>
     </header>
