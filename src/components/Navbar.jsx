@@ -1,22 +1,57 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
-function Navbar() {
+export default function Navbar() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Ошибка при выходе:', error);
+      alert('Не удалось выйти. Попробуйте еще раз.');
+    }
+  };
+
   return (
-    <header className="bg-black text-white border-b border-gray-800 sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold tracking-widest">
-          ATAKA <span className="text-amber-500">PILATES</span>
+    <nav className="bg-white shadow-md px-4 py-3">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="text-2xl font-bold text-amber-600">
+          StudioFlow
         </Link>
-        <nav className="hidden md:flex gap-8 text-sm uppercase tracking-wider">
-          <a href="#about" className="hover:text-amber-500 transition">О нас</a>
-          <a href="#trainers" className="hover:text-amber-500 transition">Тренеры</a>
-          <a href="#schedule" className="hover:text-amber-500 transition">Расписание</a>
-          <a href="#contact" className="hover:text-amber-500 transition">Записаться</a>
-          <Link to="/login" className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-md hover:bg-amber-700 transition-colors">Войти</Link>
-        </nav>
+        <div className="flex items-center gap-6">
+          <Link to="/" className="hover:text-amber-600">Главная</Link>
+          
+          {user ? (
+            <>
+              <span className="text-sm text-gray-600">
+                {user.email}
+              </span>
+              <Link to="/dashboard" className="hover:text-amber-600">
+                Кабинет
+              </Link>
+              <button 
+                onClick={handleSignOut}
+                className="text-red-500 hover:text-red-700"
+              >
+                Выйти
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="hover:text-amber-600">Войти</Link>
+              <Link 
+                to="/register" 
+                className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700"
+              >
+                Регистрация
+              </Link>
+            </>
+          )}
+        </div>
       </div>
-    </header>
+    </nav>
   );
 }
-
-export default Navbar;
